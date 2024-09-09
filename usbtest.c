@@ -2,17 +2,27 @@
 #include <assert.h>
 #include <libusb-1.0/libusb.h>
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv)
+{
+    // Print all the arguments passed to the program
+    printf("Arguments passed:\n");
+    for (int i = 0; i < argc; i++)
+    {
+        printf("argv[%d]: %s\n", i, argv[i]);
+    }
+
     libusb_context *context;
     libusb_device_handle *handle;
     libusb_device *device;
     struct libusb_device_descriptor desc;
     unsigned char buffer[256];
     int fd;
+
     assert((argc > 1) && (sscanf(argv[1], "%d", &fd) == 1));
+
     libusb_set_option(NULL, LIBUSB_OPTION_NO_DEVICE_DISCOVERY);
     assert(!libusb_init(&context));
-    assert(!libusb_wrap_sys_device(context, (intptr_t) fd, &handle));
+    assert(!libusb_wrap_sys_device(context, (intptr_t)fd, &handle));
     device = libusb_get_device(handle);
     assert(!libusb_get_device_descriptor(device, &desc));
     printf("Vendor ID: %04x\n", desc.idVendor);
